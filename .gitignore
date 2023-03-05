@@ -1,0 +1,21 @@
+#Temporary files
+__pycache__
+__pycache__/*
+temp
+temp/*
+
+#Local builds
+build
+build/*
+
+#Local resources
+dist
+dist/*
+env/
+pyHook-*-cp27*
+
+#IDE Ignore
+.vscode/
+.vs/
+
+RATAttack.spec

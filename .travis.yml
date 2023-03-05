@@ -1,0 +1,50 @@
+# https://blog.travis-ci.com/2018-10-11-windows-early-release
+# https://docs.travis-ci.com/user/reference/windows
+# https://chocolatey.org/packages/python
+os: windows   # Windows Server, version 1803
+language: sh  # 'language: python' is not yet supported
+
+py27-steps: &py27-steps
+  env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
+  before_install:
+    - choco install python2
+    - python -m pip install --upgrade pip
+
+py35-steps: &py35-steps
+  env: PATH=/c/Python35:/c/Python35/Scripts:$PATH
+  before_install:
+    - choco install python --version 3.5.4
+    - python -m pip install --upgrade pip
+
+py36-steps: &py36-steps
+  env: PATH=/c/Python36:/c/Python36/Scripts:$PATH
+  before_install:
+    - choco install python --version 3.6.8
+    - python -m pip install --upgrade pip
+
+py37-steps: &py37-steps
+  env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+  before_install:
+    - choco install python
+    - python -m pip install --upgrade pip
+
+matrix:
+  allow_failures:
+    - name: "Python 2.7"  # It is legacy Python after all...
+  include:
+    - name: "Python 2.7"
+      <<: *py27-steps
+    - name: "Python 3.5"
+      <<: *py35-steps
+    - name: "Python 3.6"
+      <<: *py36-steps
+    - name: "Python 3.7"
+      <<: *py37-steps
+install:
+  - pip install -r requirements.txt
+script:
+  - choco install opencv upx
+  - PYVER="import sys ; print('py{}{}'.format(*sys.version_info))"
+  - pip install --upgrade setuptools
+  - python compile.py --yes
+  # - ./dist/RATAttack.exe
